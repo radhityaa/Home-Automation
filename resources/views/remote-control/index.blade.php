@@ -8,8 +8,8 @@
                 <div class="card p-2 h-100 shadow-lg">
                     <div class="card-body p-3 pt-2">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="badge bg-label-success">Connected</span>
-                            <span class="text-muted">{{ date_format(now(), 'd M Y H:i:s') }}</span>
+                            <span
+                                class="badge bg-label-{{ $mqttStatus === 'Connected' ? 'success' : 'danger' }}">{{ $mqttStatus }}</span>
                         </div>
                         <a href="{{ route('remote-control.light') }}" class="h5">Kontrol Lampu</a>
                         <p class="mt-2">Remote kontrol untuk on off lampu</p>

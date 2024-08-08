@@ -17,7 +17,7 @@ class AuthController extends Controller
     {
         $credentials = $request->only('username', 'password');
 
-        if (auth()->attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->remember)) {
             return response()->json([
                 'success' => true,
                 'message' => 'Login Berhasil'

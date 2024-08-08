@@ -5,8 +5,8 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <span class="badge bg-label-success">Connected</span>
-                <span class="text-muted">{{ date_format(now(), 'd M Y H:i:s') }}</span>
+                <span
+                    class="badge bg-label-{{ $mqttStatus === 'Connected' ? 'success' : 'danger' }}">{{ $mqttStatus }}</span>
             </div>
         </div>
         <div class="card-body">
