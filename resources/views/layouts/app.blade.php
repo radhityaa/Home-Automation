@@ -39,6 +39,9 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/typeahead-js/typeahead.css') }}" />
 
+    {{-- Notyf --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/notyf.min.css') }}" />
+
     <!-- Page CSS -->
     @stack('css')
 
@@ -69,7 +72,7 @@
                     <!-- Content -->
 
                     <div class="container-xxl flex-grow-1 container-p-y">
-                        <div class="row">
+                        <div class="row px-3">
                             {{-- Content --}}
                             @yield('content')
                             {{-- /Content --}}
@@ -110,6 +113,9 @@
     <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
 
     <!-- endbuild -->
+
+    {{-- Notyf --}}
+    <script src="{{ asset('assets/js/notyf.min.js') }}"></script>
 
     <!-- Vendors JS -->
 

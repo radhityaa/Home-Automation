@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('relays', function (Blueprint $table) {
+        Schema::create('mqtts', function (Blueprint $table) {
             $table->id();
-            $table->integer('relay_number');
-            $table->string('state');
+            $table->string('host');
+            $table->integer('port')->default(1883);
+            $table->string('client_id')->nullable();
+            $table->string('username')->nullable();
+            $table->string('password')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('relays');
+        Schema::dropIfExists('mqtts');
     }
 };

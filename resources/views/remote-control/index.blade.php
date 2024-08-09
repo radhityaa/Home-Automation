@@ -3,23 +3,33 @@
 
 @section('content')
     <div class="card-body">
-        <div class="row gy-4 mb-4">
-            <div class="col-sm-6 col-lg-4">
-                <div class="card p-2 h-100 shadow-lg">
-                    <div class="card-body p-3 pt-2">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span
-                                class="badge bg-label-{{ $mqttStatus === 'Connected' ? 'success' : 'danger' }}">{{ $mqttStatus }}</span>
-                        </div>
-                        <a href="{{ route('remote-control.light') }}" class="h5">Kontrol Lampu</a>
-                        <p class="mt-2">Remote kontrol untuk on off lampu</p>
-                        <a class="app-academy-md-50 btn btn-label-primary d-flex align-items-center"
-                            href="{{ route('remote-control.light') }}">
-                            <span class="me-2">Remote</span><i class="ti ti-chevron-right scaleX-n1-rtl ti-sm"></i>
-                        </a>
-                    </div>
+        <div class="card-header mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="card-title">Remote Control</h3>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-sm btn-success"><i class="fa-solid fa-plus me-2"></i> Perangkat</button>
                 </div>
             </div>
+        </div>
+        <div class="row mb-4">
+            @foreach ($devices as $item)
+                <div class="col-md-4 g-3">
+                    <div class="card p-2 h-100 shadow-lg">
+                        <div class="card-body p-3 pt-2">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                            </div>
+                            <a href="{{ route($item->route, $item->id) }}" class="h5">{{ $item->name }}</a>
+                            <p class="mt-2">{{ $item->description }}</p>
+                            <a class="app-academy-md-50 btn btn-label-primary d-flex align-items-center"
+                                href="{{ route($item->route, $item->id) }}">
+                                <span class="me-2">Remote</span><i class="ti ti-chevron-right scaleX-n1-rtl ti-sm"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
 
         {{-- Pagination --}}

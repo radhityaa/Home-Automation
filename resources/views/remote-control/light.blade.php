@@ -3,29 +3,44 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <span
-                    class="badge bg-label-{{ $mqttStatus === 'Connected' ? 'success' : 'danger' }}">{{ $mqttStatus }}</span>
-            </div>
-        </div>
-        <div class="card-body">
+        <div class="card-body p-2 pt-3">
             <div class="mb-4">
-                <h5 class="card-title">Kontrol Lampu</h5>
-                <p class="card-text">Remote kontrol untuk on off lampu</p>
+                <h5 class="card-title">{{ $device->name }}</h5>
+                <p class="card-text">{{ $device->description }}</p>
             </div>
 
-            <div class="col-md-6">
-                <div class="demo-inline-spacing" id="relay-controls">
-
+            @foreach ($device->publishers as $item)
+                <div class="mb-3">
+                    <label class="switch switch-lg switch-success">
+                        <input type="checkbox" class="switch-input" data-id="{{ $item->id }}"
+                            data-topic="{{ $item->topic }}" />
+                        <span class="switch-toggle-slider">
+                            <span class="switch-on">
+                                <i class="ti ti-check"></i>
+                            </span>
+                            <span class="switch-off">
+                                <i class="ti ti-x"></i>
+                            </span>
+                        </span>
+                        <span class="switch-label">{{ $item->name }}</span>
+                    </label>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
 @endsection
 
 @push('script')
+    <script src="{{ asset('assets/vendor/libs/block-ui/block-ui.js') }}"></script>
+
     <script>
+        var notyf = new Notyf({
+            position: {
+                x: 'center',
+                y: 'top'
+            }
+        })
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -33,58 +48,71 @@
         })
 
         $(document).ready(function() {
-            loadRelayStatus();
+            $('.switch-input').each(function() {
+                var id = $(this).data('id');
+                var url = "{{ route('get.state', ':id') }}"
+                url = url.replace(':id', id);
+                var switchInput = $(this);
 
-            function loadRelayStatus() {
-                $.ajax({
-                    url: '/relay-status',
-                    method: 'GET',
-                    success: function(data) {
-                        var relayControls = $('#relay-controls');
-                        relayControls.empty();
-                        data.forEach(function(relay) {
-                            var checked = relay.state === 'ON' ? 'checked' : '';
-                            relayControls.append(`
-                            <label class="switch switch-success">
-                                <input type="checkbox" class="switch-input" data-relay="${relay.relay_number}" ${checked} />
-                                <span class="switch-toggle-slider">
-                                    <span class="switch-on">
-                                        <i class="ti ti-check"></i>
-                                    </span>
-                                    <span class="switch-off">
-                                        <i class="ti ti-x"></i>
-                                    </span>
-                                </span>
-                                <span class="switch-label">Lampu ${relay.relay_number}</span>
-                            </label>
-                        `);
-                        });
-
-                        $('.switch-input').change(function() {
-                            var relay = $(this).data('relay');
-                            var state = $(this).is(':checked') ? 'on' : 'off';
-                            controlRelay(relay, state);
-                        });
+                $.blockUI({
+                    message: '<div class="spinner-border text-white" role="status"></div>',
+                    css: {
+                        backgroundColor: 'transparent',
+                        border: '0'
+                    },
+                    overlayCSS: {
+                        opacity: 0.5
                     }
                 });
-            }
 
-            function controlRelay(relay, state) {
+                $.get(url, function(res) {
+                    $.unblockUI();
+                    var checked = res.state === 'ON' ? 'checked' : '';
+                    switchInput.prop('checked', checked);
+                })
+            });
+
+            $('.switch-input').change(function() {
+                var id = $(this).data('id');
+                var topic = $(this).data('topic');
+                var message = $(this).is(':checked') ? 'ON' : 'OFF';
+
+                $.blockUI({
+                    message: '<div class="spinner-border text-white" role="status"></div>',
+                    css: {
+                        backgroundColor: 'transparent',
+                        border: '0'
+                    },
+                    overlayCSS: {
+                        opacity: 0.5
+                    }
+                });
+
                 $.ajax({
                     url: '/control-relay',
                     method: 'POST',
                     data: {
-                        relay: relay,
-                        state: state
+                        topic: topic,
+                        message: message,
+                        publisher_id: id
                     },
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(data) {
-                        alert(data.message);
+                        notyf.success(data.message === 'ON' ?
+                            'Lampu Berhasil Di Nyalakan' : 'Lampu Berhasil Di Matikan');
+                        $.unblockUI();
+                    },
+                    error: function(xhr, status, error) {
+                        notyf.error(data.error);
+                        $.unblockUI();
+                    },
+                    complete: function() {
+                        $.unblockUI();
                     }
                 });
-            }
+            });
         });
     </script>
 @endpush

@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Device extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'description', 'route'];
+    protected $with = ['publishers'];
+
+    public function publishers()
+    {
+        return $this->hasMany(Publisher::class);
+    }
 }

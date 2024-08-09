@@ -2,20 +2,49 @@
 
 namespace App\Services;
 
+use App\Models\Mqtt as ModelsMqtt;
 use App\Models\Relay;
+use App\Models\State;
 use Illuminate\Support\Facades\Cache;
+use PhpMqtt\Client\ConnectionSettings;
 use PhpMqtt\Client\Facades\MQTT;
+use PhpMqtt\Client\MqttClient;
 
 class MqttService
 {
-    public function publish($topic, $message)
-    {
-        $mqtt = MQTT::connection();
-        $mqtt->publish($topic, $message);
+    protected $mqttClient;
 
-        $relay_number = substr($topic, -1);
-        Relay::updateOrCreate(
-            ['relay_number' => $relay_number],
+    public function __construct()
+    {
+        $this->loadMqttConfig();
+    }
+
+    protected function loadMqttConfig()
+    {
+        $mqtt = ModelsMqtt::first();
+
+        if (!$mqtt) {
+            throw new \Exception("MQTT settings not found in the database.");
+        }
+
+        $connectionSettings = (new ConnectionSettings)
+            ->setUsername($mqtt->username)
+            ->setPassword($mqtt->password);
+
+        $this->mqttClient = new MqttClient(
+            $mqtt->host,
+            $mqtt->port,
+            $mqtt->client_id
+        );
+
+        $this->mqttClient->connect($connectionSettings);
+    }
+
+    public function publish($topic, $message, $publisher_id)
+    {
+        $this->mqttClient->publish($topic, $message);
+        State::updateOrCreate(
+            ['publisher_id' => $publisher_id],
             ['state' => $message]
         );
     }
@@ -23,8 +52,7 @@ class MqttService
     public function connect()
     {
         try {
-            $mqtt = MQTT::connection();
-            $mqtt->connect();
+            $this->mqttClient->connect();
             Cache::put('mqtt_status', 'Connected');
         } catch (\Throwable $th) {
             Cache::put('mqtt_status', 'Disconnected');

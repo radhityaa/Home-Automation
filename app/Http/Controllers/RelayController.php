@@ -17,17 +17,16 @@ class RelayController extends Controller
 
     public function controlRelay(Request $request)
     {
-        $relay = $request->relay;
-        $state = $request->state;
+        $topic = $request->topic;
+        $message = $request->message;
+        $publisher_id = $request->publisher_id;
 
-        $topic = 'home/relay' . $relay;
-        $message = $state == 'on' ? 'ON' : 'OFF';
-
-        $this->mqttService->publish($topic, $message);
+        $this->mqttService->publish($topic, $message, $publisher_id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Relay ' . $relay . 'is turned ' . $state
+            'topic' => $topic,
+            'message' => $message,
         ]);
     }
 

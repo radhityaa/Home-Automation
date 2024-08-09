@@ -20,5 +20,11 @@ class DatabaseSeeder extends Seeder
             'username' => 'radhitya',
             'password' => bcrypt('password'),
         ]);
+
+        $this->call([
+            DeviceSeeder::class,
+            MqttSeeder::class,
+            PublisherSeeder::class,
+        ]);
     }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
+use App\Models\Publisher;
 use App\Models\Relay;
+use App\Models\State;
 use App\Services\MqttService;
 use Illuminate\Http\Request;
 
@@ -19,12 +22,16 @@ class RemoteControlController extends Controller
     public function index()
     {
         $mqttStatus = $this->mqttService->getStatus();
-        return view('remote-control.index', compact('mqttStatus'));
+        $devices = Device::all();
+
+        return view('remote-control.index', compact('mqttStatus', 'devices'));
     }
 
-    public function light()
+    public function light($id)
     {
         $mqttStatus = $this->mqttService->getStatus();
-        return view('remote-control.light', compact('mqttStatus'));
+        $device = Device::find($id);
+
+        return view('remote-control.light', compact('mqttStatus', 'device'));
     }
 }

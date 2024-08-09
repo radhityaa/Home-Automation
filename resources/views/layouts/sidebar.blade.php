@@ -55,10 +55,10 @@
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Konfigurasi</span>
         </li>
-        <li class="menu-item">
-            <a href="#" class="menu-link">
+        <li class="menu-item {{ request()->is('admin/settings/mqtt*') ? 'active' : '' }}">
+            <a href="{{ route('admin.settings.mqtt.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-devices"></i>
-                <div>Perangkat</div>
+                <div>MQTT</div>
             </a>
         </li>
 
