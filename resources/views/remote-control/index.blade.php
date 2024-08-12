@@ -193,26 +193,26 @@
                             opacity: 0.5
                         }
                     });
-                }
 
-                $.ajax({
-                    url: url,
-                    method: method,
-                    success: function(res) {
-                        notyf.success(res.message)
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 1500);
-                        $.unblockUI()
-                    },
-                    error: function(res) {
-                        notyf.error(res.responseJSON.message)
-                        $.unblockUI()
-                    },
-                    complete: function() {
-                        $.unblockUI()
-                    }
-                })
+                    $.ajax({
+                        url: url,
+                        method: method,
+                        success: function(res) {
+                            notyf.success(res.message)
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 1500);
+                            $.unblockUI()
+                        },
+                        error: function(res) {
+                            notyf.error(res.responseJSON.message)
+                            $.unblockUI()
+                        },
+                        complete: function() {
+                            $.unblockUI()
+                        }
+                    })
+                }
             });
         }
 
