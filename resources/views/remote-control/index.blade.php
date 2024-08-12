@@ -182,16 +182,18 @@
                 },
                 buttonsStyling: false
             }).then(function(result) {
-                $.blockUI({
-                    message: '<div class="spinner-border text-white" role="status"></div>',
-                    css: {
-                        backgroundColor: 'transparent',
-                        border: '0'
-                    },
-                    overlayCSS: {
-                        opacity: 0.5
-                    }
-                });
+                if (result.isConfirmed) {
+                    $.blockUI({
+                        message: '<div class="spinner-border text-white" role="status"></div>',
+                        css: {
+                            backgroundColor: 'transparent',
+                            border: '0'
+                        },
+                        overlayCSS: {
+                            opacity: 0.5
+                        }
+                    });
+                }
 
                 $.ajax({
                     url: url,
