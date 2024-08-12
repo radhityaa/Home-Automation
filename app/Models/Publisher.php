@@ -9,7 +9,7 @@ class Publisher extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'topic', 'device_id'];
+    protected $fillable = ['name', 'topic', 'device_id', 'on_message', 'off_message'];
 
     public function device()
     {

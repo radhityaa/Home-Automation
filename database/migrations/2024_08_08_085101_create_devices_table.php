@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug');
             $table->text('description')->nullable();
-            $table->string('route');
             $table->timestamps();
         });
     }

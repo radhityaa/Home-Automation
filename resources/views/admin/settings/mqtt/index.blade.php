@@ -13,34 +13,34 @@
         <div class="card-body">
             <form action="" method="POST" id="form-update">
 
-                <div class="row mb-4">
-                    <div class="form-group col-md-4">
+                <div class="row">
+                    <div class="form-group col-md-4 mb-3">
                         <label for="host">Host</label>
                         <input type="text" class="form-control" id="host" name="host"
                             placeholder="ex: 123.456.78.15" value="{{ old('host', $data->host) }}" required autofocus>
                     </div>
 
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-4 mb-3">
                         <label for="port">Port</label>
                         <input type="number" class="form-control" id="port" name="port" placeholder="1883"
                             value="{{ old('port', $data->port) }}" required>
                     </div>
 
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-4 mb-3">
                         <label for="client_id">Client ID</label>
                         <input type="text" class="form-control" id="client_id" name="client_id"
                             placeholder="mqtt-laravel" value="{{ old('client_id', $data->client_id) }}" required>
                     </div>
                 </div>
 
-                <div class="row mb-4">
-                    <div class="form-group col-md-6">
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
                         <label for="username">Username</label>
                         <input type="text" class="form-control" id="username" name="username" placeholder="Username"
                             value="{{ old('username', $data->username) }}">
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6 mb-3">
                         <label for="password">Password</label>
                         <input type="text" class="form-control" id="password" name="password" placeholder="Password"
                             value="{{ old('password', $data->password) }}">

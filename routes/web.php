@@ -9,9 +9,7 @@ use App\Http\Controllers\RemoteControlController;
 use App\Http\Controllers\StateController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AuthController::class, 'login'])->name('login');;
 
 Route::prefix('auth')->name('auth.')->group(function () {
     // Login route
@@ -39,14 +37,15 @@ Route::middleware(['auth'])->group(function () {
     // Remote Control
     Route::prefix('remote-control')->name('remote-control.')->group(function () {
         Route::get('', [RemoteControlController::class, 'index'])->name('index');
-
-        // Light Route
-        Route::get('light/{id}', [RemoteControlController::class, 'light'])->name('light');
-        Route::post('control-light', [RemoteControlController::class, 'controlLight']);
+        Route::get('view/{device}', [RemoteControlController::class, 'view'])->name('view');
+        Route::post('', [RemoteControlController::class, 'store'])->name('store');
+        Route::delete('{device}', [RemoteControlController::class, 'destroy'])->name('destroy');
+        Route::get('{device}', [RemoteControlController::class, 'edit'])->name('edit');
+        Route::put('{device}/update', [RemoteControlController::class, 'update'])->name('update');
     });
-
     // Publisher Route
     Route::prefix('publisher')->name('publisher.')->group(function () {
+        Route::post('', [PublisherController::class, 'store'])->name('store');
         Route::get('get/{id}', [PublisherController::class, 'edit'])->name('edit');
     });
 

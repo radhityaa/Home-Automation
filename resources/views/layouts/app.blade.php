@@ -114,8 +114,9 @@
 
     <!-- endbuild -->
 
-    {{-- Notyf --}}
+    {{-- Ex --}}
     <script src="{{ asset('assets/js/notyf.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/block-ui/block-ui.js') }}"></script>
 
     <!-- Vendors JS -->
 

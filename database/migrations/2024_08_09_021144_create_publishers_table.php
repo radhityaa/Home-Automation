@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('topic');
+            $table->string('on_message')->default('ON');
+            $table->string('off_message')->default('OFF');
             $table->foreignId('device_id')->constrained('devices')->onDelete('cascade');
             $table->timestamps();
         });

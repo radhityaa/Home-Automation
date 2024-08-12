@@ -2,15 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Device extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'route'];
+    protected $fillable = ['name', 'description', 'slug'];
     protected $with = ['publishers'];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function publishers()
     {
